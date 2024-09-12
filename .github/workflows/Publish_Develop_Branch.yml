@@ -45,7 +45,7 @@ jobs:
       # Find the .nupkg file and push it
     - name: Push NuGet package
       env:
-        NUGET_API_KEY: ${{ secrets.PUSH_KEY_COREBREW_APPSTARTER }}
+        NUGET_API_KEY: ${{ secrets.UPDATE_ALL_PACKAGES_KEY }}
       run: |
         $nupkg = Get-ChildItem -Path ./artifacts -Filter *.nupkg | Select-Object -First 1
         if ($nupkg -eq $null) {
