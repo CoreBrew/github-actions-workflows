@@ -2,6 +2,11 @@ name: Publish_develop_branch_NuGetPackage
 
 on:
   workflow_call:
+    secrets:
+      NuGetApiKey:
+        description: 'A NuGetApiKey passed from the caller workflow'
+        required: true
+  
 
 jobs:
   publish:
@@ -42,7 +47,7 @@ jobs:
       # Find the .nupkg file and push it
     - name: Push NuGet package
       env:
-        NUGET_API_KEY: ${{ secrets.UPDATE_ALL_PACKAGES_KEY }}
+        NUGET_API_KEY: ${{ secrets.NuGetApiKey }}
       run: |
         $nupkg = Get-ChildItem -Path ./artifacts -Filter *.nupkg | Select-Object -First 1
         if ($nupkg -eq $null) {
