@@ -39,9 +39,6 @@ jobs:
 
     - name: Pack the NuGet package
       run: dotnet pack --configuration Debug --output ./artifacts
-
-    - name: Debug Environment Variables
-      run: echo $NUGET_API_KEY
     
     - name: Debug Environment Variables      
       env:
