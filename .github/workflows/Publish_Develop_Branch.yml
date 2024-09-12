@@ -17,11 +17,6 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-        
-    - name: Debug Environment Variables      
-      env:
-        NUGET_API_KEY: ${{ secrets.UPDATE_ALL_PACKAGES_KEY }
-      run: echo $env:NUGET_API_KEY
 
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
