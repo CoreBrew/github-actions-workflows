@@ -47,14 +47,14 @@ jobs:
       run: dotnet pack --configuration Debug --output ./artifacts
       
       # Find the .nupkg file and push it
-    - name: Push NuGet package
-      env:
-        NUGET_API_KEY: ${{ secrets.NuGetApiKey }}
-      run: |
-        $nupkg = Get-ChildItem -Path ./artifacts -Filter *.nupkg | Select-Object -First 1
-        if ($nupkg -eq $null) {
-          throw "No .nupkg file found in ./artifacts"
-        }
-          dotnet nuget push $nupkg.FullName -k $env:NUGET_API_KEY -s https://api.nuget.org/v3/index.json
-      shell: pwsh
+    #- name: Push NuGet package
+    #  env:
+    #    NUGET_API_KEY: ${{ secrets.NuGetApiKey }}
+    #  run: |
+    #    $nupkg = Get-ChildItem -Path ./artifacts -Filter *.nupkg | Select-Object -First 1
+    #    if ($nupkg -eq $null) {
+    #      throw "No .nupkg file found in ./artifacts"
+    #    }
+    #      dotnet nuget push $nupkg.FullName -k $env:NUGET_API_KEY -s https://api.nuget.org/v3/index.json
+    #  shell: pwsh
           
