@@ -8,8 +8,7 @@ on:
       NuGetApiKey:
         description: 'A NuGetApiKey passed from the caller workflow'
         required: true
-  
-
+        
 jobs:
   publish:
     runs-on: windows-latest
@@ -17,8 +16,6 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
 
     - name: Install .NET Core
       uses: actions/setup-dotnet@v4
@@ -28,6 +25,60 @@ jobs:
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v2
+            
+   #Read the title tag in the .csproj file   
+    - name: Read <Title> from .csproj
+      shell: pwsh
+      run: |
+        # Find the .csproj file
+        $csprojPath = Get-ChildItem -Path . -Filter *.csproj | Select-Object -First 1
+
+        if ($csprojPath) {
+            # Use Select-Xml to extract the Title tag value
+            $titleNode = Select-Xml -Path $csprojPath.FullName -XPath "//Project/PropertyGroup/Title" | Select-Object -First 1
+
+            if ($titleNode -ne $null) {
+                $title = $titleNode.Node.InnerText
+                Write-Host "Project Title: $title"
+                echo "::set-output name=project_title::$title"
+            }
+            else {
+                Write-Host "No <Title> tag found in the .csproj file."
+            }
+        }
+        else {
+            Write-Host "No .csproj file found in the directory."
+        }
+      
+      # Use the project title in subsequent steps if needed
+    - name: Use Project Title
+      run: echo "The project title is: ${{ steps.read-title.outputs.project_title }}"      
+      
+      # Fetch the latest package version from NuGet.org
+    - name: Fetch latest alpha version
+      shell: pwsh
+      env:
+        PACKAGE_ID: YourPackageName  # Replace with the actual package name
+      run: |
+        $latestVersion = (Invoke-RestMethod -Uri "https://api.nuget.org/v3-flatcontainer/$env:PACKAGE_ID/index.json").versions |
+                         Where-Object { $_ -like "*-alpha*" } |
+                         Sort-Object { [System.Version]$_ } -Descending |
+                         Select-Object -First 1
+
+        if (-not $latestVersion) {
+          Write-Host "No alpha version found, starting from 1.0.0-alpha.1"
+          $nextVersion = "1.0.0-alpha.1"
+        }
+        else {
+          Write-Host "Latest alpha version found: $latestVersion"
+          $versionParts = $latestVersion -split '-alpha.'
+          $majorMinorPatch = $versionParts[0]
+          $alphaVersion = [int]$versionParts[1]
+          $nextVersion = "$majorMinorPatch-alpha.$($alphaVersion + 1)"
+        }
+
+        Write-Host "Next version will be: $nextVersion"
+        echo "::set-output name=nextVersion::$nextVersion"      
 
     # Execute all unit tests in the solution
     - name: Execute unit tests
@@ -45,7 +96,7 @@ jobs:
 
     - name: Pack the NuGet package
       run: dotnet pack --configuration Debug --output ./artifacts
-      
+
       # Find the .nupkg file and push it
     #- name: Push NuGet package
     #  env:
