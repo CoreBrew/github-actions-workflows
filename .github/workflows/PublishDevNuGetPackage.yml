@@ -50,10 +50,10 @@ jobs:
         else {
             Write-Host "No .csproj file found in the directory."
             Write-Host "Current directory is: $(Get-Location)"
-            Write-Hoset "############# with source #########################"
-            Write-Hoset "Dir command: $(Get-ChildItem -Path ./Src -Recurse)"
-            Write-Hoset "############# without source ######################"        
-            Write-Hoset "Dir command: $(Get-ChildItem -Path . -Recurse)"        
+            Write-Host "############# with source #########################"
+            Write-Host "Dir command: $(Get-ChildItem -Path ./Src -Recurse)"
+            Write-Host "############# without source ######################"        
+            Write-Host "Dir command: $(Get-ChildItem -Path . -Recurse)"        
         }
       
       # Use the project title in subsequent steps if needed
