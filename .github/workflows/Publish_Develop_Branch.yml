@@ -1,4 +1,4 @@
-name: Publish_develop_branch_NuGetPackage
+name: PublishDevNuGetPackage
 
 run-name: Deploy to NuGet.org by @{{ github.actor }}
 
@@ -16,11 +16,12 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-
-    - name: Install .NET Core
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
+    
+    #Commented out since it should be installed already on the github hosted runner
+    #- name: Install .NET Core
+      #uses: actions/setup-dotnet@v4
+      #with:
+        #dotnet-version: 8.x.x
 
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
@@ -47,6 +48,7 @@ jobs:
         }
         else {
             Write-Host "No .csproj file found in the directory."
+            Write-Host "Current directory is: $(Get-Location)"
         }
       
       # Use the project title in subsequent steps if needed
