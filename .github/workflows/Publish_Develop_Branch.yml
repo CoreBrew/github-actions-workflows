@@ -39,8 +39,7 @@ jobs:
 
             if ($titleNode -ne $null) {
                 $title = $titleNode.Node.InnerText
-                Write-Host "Project Title: $title"
-                echo "::set-output name=project_title::$title"
+                Write-Host "Project Title: $title"                                
             }
             else {
                 Write-Host "No <Title> tag found in the .csproj file."
@@ -52,7 +51,7 @@ jobs:
       
       # Use the project title in subsequent steps if needed
     - name: Use Project Title
-      run: echo "The project title is: ${{ steps.read-title.outputs.project_title }}"      
+      run: echo "The project title is: $title"      
       
       # Fetch the latest package version from NuGet.org
     - name: Fetch latest alpha version
