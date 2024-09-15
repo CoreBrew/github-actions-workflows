@@ -40,7 +40,8 @@ jobs:
 
             if ($titleNode -ne $null) {
                 $title = $titleNode.Node.InnerText
-                Write-Host "Project Title: $title"                                
+                Write-Host "Project Title: $title"
+                Add-Content -Path $env:GITHUB_ENV -Value "CSPROJ_TITLE=$title"        
             }
             else {
                 Write-Host "No <Title> tag found in the .csproj file."
@@ -57,13 +58,13 @@ jobs:
       
       # Use the project title in subsequent steps if needed
     - name: Use Project Title
-      run: echo "The project title is $title"      
+      run: echo "The project title is $CSPROJ_TITLE"      
       
       # Fetch the latest package version from NuGet.org
     - name: Fetch latest alpha version
       shell: pwsh
       env:
-        PACKAGE_ID: YourPackageName  # Replace with the actual package name
+        PACKAGE_ID: $CSPROJ_TITLE  # Replace with the actual package name
       run: |
         $latestVersion = (Invoke-RestMethod -Uri "https://api.nuget.org/v3-flatcontainer/$env:PACKAGE_ID/index.json").versions |
                          Where-Object { $_ -like "*-alpha*" } |
@@ -71,7 +72,7 @@ jobs:
                          Select-Object -First 1
 
         if (-not $latestVersion) {
-          Write-Host "No alpha version found, starting from 1.0.0-alpha.1"
+          Write-Host "No alpha version found, starting from 1.0.0-alpha.1"          
           $nextVersion = "1.0.0-alpha.1"
         }
         else {
@@ -81,7 +82,7 @@ jobs:
           $alphaVersion = [int]$versionParts[1]
           $nextVersion = "$majorMinorPatch-alpha.$($alphaVersion + 1)"
         }
-
+        Write-Host "Latest version is:    $latestVersion"
         Write-Host "Next version will be: $nextVersion"
         echo "::set-output name=nextVersion::$nextVersion"      
 
