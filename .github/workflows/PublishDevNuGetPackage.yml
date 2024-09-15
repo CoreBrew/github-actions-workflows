@@ -59,16 +59,14 @@ jobs:
       # Use the project title in subsequent steps if needed
     - name: Use Project Title
       run: |
-        echo "The project title is $CSPROJ_TITLE"      
+        echo "The project title is $env:CSPROJ_TITLE"      
         echo $CSPROJ_TITLE
       
       # Fetch the latest package version from NuGet.org
     - name: Fetch latest alpha version
       shell: pwsh
-      env:
-        PACKAGE_ID: $CSPROJ_TITLE  # Replace with the actual package name
       run: |
-        $latestVersion = (Invoke-RestMethod -Uri "https://api.nuget.org/v3-flatcontainer/$env:PACKAGE_ID/index.json").versions |
+        $latestVersion = (Invoke-RestMethod -Uri "https://api.nuget.org/v3-flatcontainer/$env:CSPROJ_TITLE/index.json").versions |
                          Where-Object { $_ -like "*-alpha*" } |
                          Sort-Object { [System.Version]$_ } -Descending |
                          Select-Object -First 1
