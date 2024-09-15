@@ -51,7 +51,7 @@ jobs:
       
       # Use the project title in subsequent steps if needed
     - name: Use Project Title
-      run: echo "The project title is: $title"      
+      run: echo "The project title is $title"      
       
       # Fetch the latest package version from NuGet.org
     - name: Fetch latest alpha version
