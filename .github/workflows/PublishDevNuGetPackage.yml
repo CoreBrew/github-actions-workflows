@@ -39,7 +39,7 @@ jobs:
             $titleNode = Select-Xml -Path $csprojPath.FullName -XPath "//Project/PropertyGroup/Title" | Select-Object -First 1
 
             if ($titleNode -ne $null) {
-                $title = $titleNode.Node.InnerText
+                $title = $titleNode.Node.InnerText.ToLower()
                 Write-Host "Project Title: $title"     
                 "CSPROJ_TITLE=$title" >> $env:GITHUB_ENV
             }
