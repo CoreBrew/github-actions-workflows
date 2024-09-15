@@ -32,7 +32,8 @@ jobs:
       shell: pwsh
       run: |
         # Find the .csproj file
-        $csprojPath = Get-ChildItem -Path . -Filter *.csproj | Select-Object -First 1
+        
+        $csprojPath = Get-ChildItem -Path ./src -Filter *.csproj | Select-Object -First 1
 
         if ($csprojPath) {
             # Use Select-Xml to extract the Title tag value
