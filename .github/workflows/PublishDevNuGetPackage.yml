@@ -40,8 +40,8 @@ jobs:
 
             if ($titleNode -ne $null) {
                 $title = $titleNode.Node.InnerText
-                Write-Host "Project Title: $title"                
-                echo "CSPROJ_TITLE=$title" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf8 -Append
+                Write-Host "Project Title: $title"     
+                "CSPROJ_TITLE=$title" >> $env:GITHUB_ENV
             }
             else {
                 Write-Host "No <Title> tag found in the .csproj file."
