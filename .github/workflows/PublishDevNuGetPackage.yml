@@ -50,6 +50,7 @@ jobs:
         else {
             Write-Host "No .csproj file found in the directory."
             Write-Host "Current directory is: $(Get-Location)"
+            Write-Hoset "Dir command: $(Get-ChildItem -Path -Recurse)"
         }
       
       # Use the project title in subsequent steps if needed
