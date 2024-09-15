@@ -59,6 +59,7 @@ jobs:
       # Use the project title in subsequent steps if needed
     - name: Use Project Title
       run: echo "The project title is $CSPROJ_TITLE"      
+      run: echo $CSPROJ_TITLE
       
       # Fetch the latest package version from NuGet.org
     - name: Fetch latest alpha version
