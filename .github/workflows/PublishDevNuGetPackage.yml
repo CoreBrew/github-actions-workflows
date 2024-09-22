@@ -4,6 +4,11 @@ run-name: Deploy to NuGet.org by @{{ github.actor }}
 
 on:
   workflow_call:
+    inputs:
+      devReleaseStage:
+        description: 'The release stage to deploy to, fx alpha, beta, rc'
+        required: true
+        type: string
     secrets:
       NuGetApiKey:
         description: 'A NuGetApiKey passed from the caller workflow'
@@ -62,6 +67,7 @@ jobs:
         echo "The project title is $env:CSPROJ_TITLE"      
         echo $CSPROJ_TITLE
       
+      #https://api.nuget.org/v3-flatcontainer/corebrew.appstarter/index.json - test in fx browser
       # Fetch the latest package version from NuGet.org
     - name: Fetch latest alpha version
       shell: pwsh
@@ -86,15 +92,15 @@ jobs:
         Write-Host "Next version will be: $nextVersion"
         echo "::set-output name=nextVersion::$nextVersion"      
 
-    # Execute all unit tests in the solution
-    - name: Execute unit tests
-      run: dotnet test      
-
     - name: Restore dependencies
       run: dotnet restore
 
     - name: Build project
       run: dotnet build --configuration Debug --no-restore
+
+    # Execute all unit tests in the solution
+    - name: Execute unit tests
+      run: dotnet test      
       
       # Ensure the artifacts folder exists
     - name: Create artifacts folder
