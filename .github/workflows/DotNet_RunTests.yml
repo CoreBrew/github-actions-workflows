@@ -5,7 +5,7 @@ on:
     inputs:    
       runsOn:
         type: string
-        required: true
+        required: false
         default: ubuntu-latest  # Default environment if not specified       
     outputs:
       testSuccess: ${{ steps.testStep.outcome }} # Set the job output based on build step outcome
