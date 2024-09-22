@@ -7,12 +7,16 @@ on:
         description: 'The build configuration to use, fx Debug, Release'
         required: true
         type: string
+    runsOn:
+      type: string
+      required: true
+      default: ubuntu-latest  # Default environment if not specified      
     outputs:
       buildSuccess: ${{ steps.buildStep.outcome }} # Set the job output based on build step outcome
         
 jobs:
   BuildSolution:
-    runs-on: windows-latest
+    runs-on: ${{ inputs.runsOn }}  # Use the input for runs-on
 
     steps: 
       - name: Checkout

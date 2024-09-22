@@ -33,6 +33,7 @@ jobs:
   
   watwat:
     needs: shared-Pack-workflow
+    runs-on: ubuntu-latest
     steps:
             
    #Read the title tag in the .csproj file   

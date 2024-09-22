@@ -2,12 +2,17 @@ name: TestDotNetSolution
 
 on:
   workflow_call:
+    inputs:    
+      runsOn:
+        type: string
+        required: true
+        default: ubuntu-latest  # Default environment if not specified       
     outputs:
       testSuccess: ${{ steps.testStep.outcome }} # Set the job output based on build step outcome
         
 jobs:
   RunTests:
-    runs-on: windows-latest
+    runs-on: ${{ inputs.runsOn }}  # Use the input for runs-on
 
     steps:      
       # Execute all unit tests in the solution

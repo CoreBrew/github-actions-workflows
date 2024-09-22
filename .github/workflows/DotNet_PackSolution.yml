@@ -6,12 +6,17 @@ on:
       buildConfiguration:
         description: 'The pack configuration to use, fx Debug, Release'
         required: true
-        type: string    
+        type: string       
+      runsOn:
+        type: string
+        required: true
+        default: ubuntu-latest  # Default environment if not specified           
     outputs:
       packSuccess: ${{ steps.packStep.outcome }} # Set the job output based on build step outcome
         
 jobs:
   PackSolution:
+    runs-on: ${{ inputs.runsOn }}  # Use the input for runs-on
     steps:
       # Ensure the artifacts folder exists
       - name: Create artifacts folder
