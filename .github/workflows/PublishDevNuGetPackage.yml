@@ -32,7 +32,7 @@ jobs:
   
   
   watwat:
-    needs: Shared-Build-workflow
+    needs: Shared-Test-workflow
     steps:
             
    #Read the title tag in the .csproj file   

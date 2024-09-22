@@ -6,7 +6,7 @@ on:
       testSuccess: ${{ steps.testStep.outcome }} # Set the job output based on build step outcome
         
 jobs:
-  BuildSolution:
+  RunTests:
     runs-on: windows-latest
 
     steps:      
