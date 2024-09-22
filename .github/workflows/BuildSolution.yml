@@ -11,8 +11,6 @@ on:
         type: string
         required: false
         default: ubuntu-latest  # Default environment if not specified      
-    outputs:
-      buildSuccess: ${{ steps.buildStep.outcome }} # Set the job output based on build step outcome
         
 jobs:
   BuildSolution:
@@ -30,12 +28,9 @@ jobs:
         run: dotnet restore
   
       - name: Build project
-        id: buildStep # Assign an ID to reference the steps result
         run: dotnet build --configuration {{ inputs.buildConfiguration}} --no-restore
                
-      - name: Set buildSuccess output based on job status
-        if: ${{ always() }}  # This ensures the step runs even if the build fails
-        run: echo "buildSuccess=${{ job.status == 'success' }}" >> $GITHUB_ENV
+
 
 
 

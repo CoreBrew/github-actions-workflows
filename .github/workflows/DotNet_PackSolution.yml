@@ -11,8 +11,6 @@ on:
         type: string
         required: false
         default: ubuntu-latest  # Default environment if not specified           
-    outputs:
-      packSuccess: ${{ steps.packStep.outcome }} # Set the job output based on build step outcome
         
 jobs:
   PackSolution:
@@ -22,13 +20,8 @@ jobs:
       - name: Create artifacts folder
         run: mkdir artifacts
 
-      - name: Pack the NuGet package
-        id: packStep # Assign an ID to reference the steps result        
+      - name: Pack the NuGet package 
         run: dotnet pack --configuration {{ inputs.buildConfiguration}} --output ./artifacts
-               
-      - name: Set packSuccess output based on job status
-        if: ${{ always() }}  # This ensures the step runs even if the build fails
-        run: echo "packSuccess=${{ job.status == 'success' }}" >> $GITHUB_ENV
 
 
 
