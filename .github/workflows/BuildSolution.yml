@@ -1,6 +1,4 @@
-name: PublishDevNuGetPackage
-
-run-name: Deploy to NuGet.org by @{{ github.actor }}
+name: BuildDotNetSolution
 
 on:
   workflow_call:
@@ -16,25 +14,24 @@ jobs:
   BuildSolution:
     runs-on: windows-latest
 
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-
-    # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
-    - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v2
-            
-
-    - name: Restore dependencies
-      run: dotnet restore
-
-    - name: Build project
-      id: buildStep # Assign an ID to reference the steps result
-      run: dotnet build --configuration {{ inputs.buildConfiguration}} --no-restore
-             
-    - name: Set buildSuccess output based on job status
-      if: ${{ always() }}  # This ensures the step runs even if the build fails
-      run: echo "buildSuccess=${{ job.status == 'success' }}" >> $GITHUB_ENV
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v4
+  
+      # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
+      - name: Setup MSBuild.exe
+        uses: microsoft/setup-msbuild@v2
+              
+      - name: Restore dependencies
+        run: dotnet restore
+  
+      - name: Build project
+        id: buildStep # Assign an ID to reference the steps result
+        run: dotnet build --configuration {{ inputs.buildConfiguration}} --no-restore
+               
+      - name: Set buildSuccess output based on job status
+        if: ${{ always() }}  # This ensures the step runs even if the build fails
+        run: echo "buildSuccess=${{ job.status == 'success' }}" >> $GITHUB_ENV
 
 
 

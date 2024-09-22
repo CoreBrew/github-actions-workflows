@@ -1,0 +1,27 @@
+name: TestDotNetSolution
+
+on:
+  workflow_call:
+    outputs:
+      testSuccess: ${{ steps.testStep.outcome }} # Set the job output based on build step outcome
+        
+jobs:
+  BuildSolution:
+    runs-on: windows-latest
+
+    steps:      
+      # Execute all unit tests in the solution
+      - name: Execute unit tests
+        id: testStep # Assign an ID to reference the steps result        
+        run: dotnet test
+               
+      - name: Set testSuccess output based on job status
+        if: ${{ always() }}  # This ensures the step runs even if the test fails
+        run: echo "testSuccess=${{ job.status == 'success' }}" >> $GITHUB_ENV
+
+
+
+
+
+
+          

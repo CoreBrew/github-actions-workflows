@@ -15,22 +15,31 @@ on:
         required: true
         
 jobs:
-  publish:
-    runs-on: windows-latest
-
+  Shared-Build-workflow:
+    uses: CoreBrew/github-actions-workflows/.github/workflows/BuildSolution.yml@main
+    with:
+      buildConfiguration: Debug
+    outputs:
+        buildSuccess: ${{ steps.buildStep.outcome }} # Set the job output based on build step outcome
+        
+  Shared-Test-workflow:
+    needs: Shared-Build-workflow
+    uses: CoreBrew/github-actions-workflows/.github/workflows/DotNet_RunTests.yml@main
+    outputs:
+        testSuccess: ${{ steps.testStep.outcome }} # Set the job output based on build step outcome
+  
+  shared-Pack-workflow:
+    needs: Shared-Build-workflow
+    uses: CoreBrew/github-actions-workflows/.github/workflows/DotNet_PackSolution.yml@main
+    with:
+      buildConfiguration: Debug
+    outputs:
+        packSuccess: ${{ steps.packStep.outcome }} # Set the job output based on build step outcome
+  
+  
+  watwat:
+    needs: Shared-Build-workflow
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    
-    #Commented out since it should be installed already on the github hosted runner
-    #- name: Install .NET Core
-      #uses: actions/setup-dotnet@v4
-      #with:
-        #dotnet-version: 8.x.x
-
-    # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
-    - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v2
             
    #Read the title tag in the .csproj file   
     - name: Read <Title> from .csproj
@@ -91,23 +100,6 @@ jobs:
         Write-Host "Latest version is:    $latestVersion"
         Write-Host "Next version will be: $nextVersion"
         echo "::set-output name=nextVersion::$nextVersion"      
-
-    - name: Restore dependencies
-      run: dotnet restore
-
-    - name: Build project
-      run: dotnet build --configuration Debug --no-restore
-
-    # Execute all unit tests in the solution
-    - name: Execute unit tests
-      run: dotnet test      
-      
-      # Ensure the artifacts folder exists
-    - name: Create artifacts folder
-      run: mkdir artifacts
-
-    - name: Pack the NuGet package
-      run: dotnet pack --configuration Debug --output ./artifacts
 
       # Find the .nupkg file and push it
     #- name: Push NuGet package

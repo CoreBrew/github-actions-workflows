@@ -1,0 +1,33 @@
+name: PackDotNetSolution
+
+on:
+  workflow_call:
+    inputs:
+      buildConfiguration:
+        description: 'The pack configuration to use, fx Debug, Release'
+        required: true
+        type: string    
+    outputs:
+      packSuccess: ${{ steps.packStep.outcome }} # Set the job output based on build step outcome
+        
+jobs:
+  PackSolution:
+    steps:
+      # Ensure the artifacts folder exists
+      - name: Create artifacts folder
+        run: mkdir artifacts
+
+      - name: Pack the NuGet package
+        id: packStep # Assign an ID to reference the steps result        
+        run: dotnet pack --configuration {{ inputs.buildConfiguration}} --output ./artifacts
+               
+      - name: Set packSuccess output based on job status
+        if: ${{ always() }}  # This ensures the step runs even if the build fails
+        run: echo "packSuccess=${{ job.status == 'success' }}" >> $GITHUB_ENV
+
+
+
+
+
+
+          
