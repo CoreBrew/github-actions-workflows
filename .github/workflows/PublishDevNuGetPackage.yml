@@ -19,22 +19,16 @@ jobs:
     uses: CoreBrew/github-actions-workflows/.github/workflows/BuildSolution.yml@main
     with:
       buildConfiguration: Debug
-    outputs:
-        buildSuccess: ${{ steps.buildStep.outcome }} # Set the job output based on build step outcome
         
   Shared-Test-workflow:
     needs: Shared-Build-workflow
     uses: CoreBrew/github-actions-workflows/.github/workflows/DotNet_RunTests.yml@main
-    outputs:
-        testSuccess: ${{ steps.testStep.outcome }} # Set the job output based on build step outcome
   
   shared-Pack-workflow:
-    needs: Shared-Build-workflow
+    needs: Shared-Test-workflow
     uses: CoreBrew/github-actions-workflows/.github/workflows/DotNet_PackSolution.yml@main
     with:
       buildConfiguration: Debug
-    outputs:
-        packSuccess: ${{ steps.packStep.outcome }} # Set the job output based on build step outcome
   
   
   watwat:
