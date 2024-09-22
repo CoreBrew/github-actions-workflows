@@ -7,10 +7,10 @@ on:
         description: 'The build configuration to use, fx Debug, Release'
         required: true
         type: string
-    runsOn:
-      type: string
-      required: false
-      default: ubuntu-latest  # Default environment if not specified      
+      runsOn:
+        type: string
+        required: false
+        default: ubuntu-latest  # Default environment if not specified      
     outputs:
       buildSuccess: ${{ steps.buildStep.outcome }} # Set the job output based on build step outcome
         
