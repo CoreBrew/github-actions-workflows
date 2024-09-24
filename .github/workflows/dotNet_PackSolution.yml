@@ -1,4 +1,4 @@
-name: PackDotNetSolution
+name: dotNet_PackSolution
 
 on:
   workflow_call:

@@ -1,4 +1,4 @@
-name: TestDotNetSolution
+name: dotNet_RunTests
 
 on:
   workflow_call:

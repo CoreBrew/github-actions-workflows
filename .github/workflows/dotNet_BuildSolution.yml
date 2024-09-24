@@ -1,4 +1,4 @@
-name: BuildDotNetSolution
+name: dotNet_BuildSolution
 
 on:
   workflow_call:
