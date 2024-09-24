@@ -21,7 +21,7 @@ jobs:
         run: mkdir artifacts
 
       - name: Pack the NuGet package 
-        run: dotnet pack --configuration {{ inputs.buildConfiguration}} --output ./artifacts
+        run: dotnet pack --configuration ${{ inputs.buildConfiguration}} --output ./artifacts
 
 
 

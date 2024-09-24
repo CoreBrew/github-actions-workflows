@@ -24,7 +24,7 @@ jobs:
         run: dotnet restore
 
       - name: Build project
-        run: dotnet build --configuration {{ inputs.buildConfiguration }} --no-restore
+        run: dotnet build --configuration ${{ inputs.buildConfiguration }} --no-restore
                
 
 
