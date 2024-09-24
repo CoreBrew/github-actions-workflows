@@ -11,20 +11,20 @@ on:
         type: string
         required: false
         default: ubuntu-latest  # Default environment if not specified      
-        
+
 jobs:
   BuildSolution:
     runs-on: ${{ inputs.runsOn }}  # Use the input for runs-on
 
-    steps: 
+    steps:
       - name: Checkout
         uses: actions/checkout@v4
-              
+
       - name: Restore dependencies
         run: dotnet restore
-  
+
       - name: Build project
-        run: dotnet build --configuration {{ inputs.buildConfiguration}} --no-restore
+        run: dotnet build --configuration {{ inputs.buildConfiguration }} --no-restore
                
 
 
