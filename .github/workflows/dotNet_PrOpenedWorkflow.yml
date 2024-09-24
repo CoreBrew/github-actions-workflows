@@ -2,7 +2,8 @@ name: dotNet_PrOpenedWorkflow
 on:
   workflow_call:
     inputs:
-      buildConfiguration:        
+      buildConfiguration:
+        description: 'The build configuration to use, fx Debug, Release'        
         required: true
         type: string
         
