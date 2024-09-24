@@ -12,8 +12,13 @@ jobs:
   RunTests:
     runs-on: ${{ inputs.runsOn }}  # Use the input for runs-on
 
-    steps:      
-      # Execute all unit tests in the solution
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Restore dependencies
+        run: dotnet restore
+           
       - name: Execute unit tests
         id: testStep # Assign an ID to reference the steps result        
         run: dotnet test
