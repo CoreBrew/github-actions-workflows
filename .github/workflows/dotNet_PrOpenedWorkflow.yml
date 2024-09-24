@@ -14,4 +14,4 @@ jobs:
         
   test:
     needs: build
-    uses: CoreBrew/github-actions-workflows/.github/workflows/DotNet_RunTests.yml@main
+    uses: CoreBrew/github-actions-workflows/.github/workflows/dotNet_RunTests.yml@main

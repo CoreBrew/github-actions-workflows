@@ -16,17 +16,17 @@ on:
         
 jobs:
   Shared-Build-workflow:
-    uses: CoreBrew/github-actions-workflows/.github/workflows/BuildSolution.yml@main
+    uses: CoreBrew/github-actions-workflows/.github/workflows/dotNet_BuildSolution.yml@main
     with:
       buildConfiguration: Debug
         
   Shared-Test-workflow:
     needs: Shared-Build-workflow
-    uses: CoreBrew/github-actions-workflows/.github/workflows/DotNet_RunTests.yml@main
+    uses: CoreBrew/github-actions-workflows/.github/workflows/dotNet_RunTests.yml@main
   
   shared-Pack-workflow:
     needs: Shared-Test-workflow
-    uses: CoreBrew/github-actions-workflows/.github/workflows/DotNet_PackSolution.yml@main
+    uses: CoreBrew/github-actions-workflows/.github/workflows/dotNet_PackSolution.yml@main
     with:
       buildConfiguration: Debug
   
