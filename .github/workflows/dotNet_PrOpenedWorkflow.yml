@@ -9,10 +9,10 @@ on:
         
 jobs:
   build:
-    uses: CoreBrew/github-actions-workflows/.github/workflows/dotnet/common/dotNet_BuildSolution.yml@main
+    uses: CoreBrew/github-actions-workflows/.github/workflows/dotNet_BuildSolution.yml@main
     with:
       buildConfiguration: {{ inputs.buildConfiguration }}
         
   test:
     needs: build
-    uses: CoreBrew/github-actions-workflows/.github/workflows/dotnet/common/DotNet_RunTests.yml@main
+    uses: CoreBrew/github-actions-workflows/.github/workflows/DotNet_RunTests.yml@main
