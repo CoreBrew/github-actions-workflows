@@ -11,7 +11,7 @@ jobs:
   build:
     uses: CoreBrew/github-actions-workflows/.github/workflows/dotNet_BuildSolution.yml@main
     with:
-      buildConfiguration: {{ inputs.buildConfiguration }}
+      buildConfiguration: ${{ inputs.buildConfiguration }}
         
   test:
     needs: build
