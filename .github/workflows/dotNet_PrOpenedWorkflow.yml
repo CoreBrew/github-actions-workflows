@@ -1,9 +1,8 @@
-name: dotNetPrVerificationWorkflow
+name: dotNet_PrOpenedWorkflow
 on:
   workflow_call:
     inputs:
-      buildConfiguration:
-        description: 'The release stage to deploy to, fx alpha, beta, rc'
+      buildConfiguration:        
         required: true
         type: string
         
