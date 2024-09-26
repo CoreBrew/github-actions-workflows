@@ -3,7 +3,7 @@ on:
   workflow_call:
     inputs:
       buildConfiguration:
-        description: 'The build configuration to use, fx Debug, Release'
+        description: 'The build configuration to use, fx Debug, Release'        
         required: true
         type: string
         
@@ -11,8 +11,10 @@ jobs:
   build:
     uses: CoreBrew/github-actions-workflows/.github/workflows/dotNet_BuildSolution.yml@main
     with:
-      buildConfiguration: ${{ inputs.buildConfiguration }}
+      buildConfiguration: Release
         
   test:
     needs: build
     uses: CoreBrew/github-actions-workflows/.github/workflows/dotNet_RunTests.yml@main
+    
+  
