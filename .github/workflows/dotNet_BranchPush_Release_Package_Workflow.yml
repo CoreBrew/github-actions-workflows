@@ -1,0 +1,27 @@
+name: dotNet_BranchPush_Release_Package_Workflow
+on:
+  workflow_call:
+    inputs:
+      buildConfiguration:
+        description: 'The build configuration to use, fx Debug, Release'        
+        required: true
+        type: string
+    secrets:
+      NuGetApiKey:
+        description: 'A NuGetApiKey passed from the caller workflow'
+        required: true
+
+jobs:
+  build:
+    uses: CoreBrew/github-actions-workflows/.github/workflows/dotNet_BuildSolution.yml@main
+    with:
+      buildConfiguration: ${{ inputs.buildConfiguration }}
+    secrets:
+      NuGetApiKey: ${{ secrets.UPDATE_ALL_PACKAGES_KEY }}      
+  packToNuGetOrg:
+    needs: build
+    uses: CoreBrew/github-actions-workflows/.github/workflows/dotNet_PackSolution.yml@main
+    with:
+      buildConfiguration: ${{ inputs.buildConfiguration }}
+    secrets:
+      NuGetApiKey: ${{ secrets.UPDATE_ALL_PACKAGES_KEY }}      

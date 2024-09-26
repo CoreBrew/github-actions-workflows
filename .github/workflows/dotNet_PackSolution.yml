@@ -6,12 +6,16 @@ on:
       buildConfiguration:
         description: 'The pack configuration to use, fx Debug, Release'
         required: true
-        type: string       
+        type: string
       runsOn:
         type: string
         required: false
-        default: ubuntu-latest  # Default environment if not specified           
-        
+        default: ubuntu-latest  # Default environment if not specified
+    secrets:
+      NuGetApiKey:
+        description: 'A NuGetApiKey passed from the caller workflow'
+        required: true        
+
 jobs:
   PackSolution:
     runs-on: ${{ inputs.runsOn }}  # Use the input for runs-on
@@ -20,8 +24,34 @@ jobs:
       - name: Create artifacts folder
         run: mkdir artifacts
 
-      - name: Pack the NuGet package 
+      - name: Pack the NuGet package
         run: dotnet pack --configuration ${{ inputs.buildConfiguration}} --output ./artifacts
+      
+      # List created .nupkg files
+      - name: List .nupkg files
+        run: ls ./artifacts/*.nupkg
+          
+      # Check each package and upload if it doesn't exist
+      - name: Upload NuGet packages if they do not exist
+        env:
+          NUGET_API_KEY: ${{ secrets.NuGetApiKey }}        
+        run: |
+          for package in ./artifacts/*.nupkg; do
+            # Extract package name and version from the .nupkg filename
+            file_name=$(basename "$package")
+            package_id=$(echo "$file_name" | cut -d'.' -f1)  # Package ID from the file name
+            version=$(echo "$file_name" | cut -d'.' -f2)    # Version from the file name (assumes version is second part)
+
+            # Check if the package exists on NuGet
+            status_code=$(curl -o /dev/null -s -w "%{http_code}" "https://api.nuget.org/v3-flatcontainer/$package_id/$version/$file_name")
+
+            if [ "$status_code" -eq 404 ]; then
+              echo "Package $package_id version $version does not exist on NuGet. Uploading..."
+              dotnet nuget push "$package" --api-key ${{ inputs.nugetApiKey }} --source https://api.nuget.org/v3/index.json
+            else
+              echo "Package $package_id version $version already exists on NuGet. Skipping upload."
+            fi
+          done          
 
 
 
