@@ -16,7 +16,7 @@ jobs:
     uses: CoreBrew/github-actions-workflows/.github/workflows/dotNet_BuildSolution.yml@main
     with:
       buildConfiguration: ${{ inputs.buildConfiguration }}
-  packToNuGetOrg:
+  PublishNewPackages:
     needs: build
     uses: CoreBrew/github-actions-workflows/.github/workflows/dotNet_PackSolution.yml@main
     with:

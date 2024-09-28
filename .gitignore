@@ -103,3 +103,5 @@ obj/
 appsettings*.json
 ## ignore logs folder
 **/logs
+
+*.nupkg

@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{9C802786-CD20-49BF-BC4D-A0A72804EFBE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{7214481E-3614-4C30-879F-5DAFB51BA918}"
+	ProjectSection(SolutionItems) = preProject
+		Samples\PackSolution.ps1 = Samples\PackSolution.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{50A1ED62-442D-4D7B-9075-179647C51197}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetPackProject2", "Samples\NuGetPackProject2\NuGetPackProject2.csproj", "{92FD01BB-4E44-4D6F-9100-1B3CE5BC102E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetPackProject1", "Samples\NuGetPackProject1\NuGetPackProject1.csproj", "{4F0C124F-2E1F-4985-8171-A95FB25E2CB7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tricky.Project1234", "Samples\Tricky.Project1234\Tricky.Project1234.csproj", "{FB806ED3-361D-4C38-8CF5-A01C1A0FB143}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{92FD01BB-4E44-4D6F-9100-1B3CE5BC102E} = {7214481E-3614-4C30-879F-5DAFB51BA918}
+		{4F0C124F-2E1F-4985-8171-A95FB25E2CB7} = {7214481E-3614-4C30-879F-5DAFB51BA918}
+		{FB806ED3-361D-4C38-8CF5-A01C1A0FB143} = {7214481E-3614-4C30-879F-5DAFB51BA918}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{92FD01BB-4E44-4D6F-9100-1B3CE5BC102E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92FD01BB-4E44-4D6F-9100-1B3CE5BC102E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92FD01BB-4E44-4D6F-9100-1B3CE5BC102E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92FD01BB-4E44-4D6F-9100-1B3CE5BC102E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F0C124F-2E1F-4985-8171-A95FB25E2CB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F0C124F-2E1F-4985-8171-A95FB25E2CB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F0C124F-2E1F-4985-8171-A95FB25E2CB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F0C124F-2E1F-4985-8171-A95FB25E2CB7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB806ED3-361D-4C38-8CF5-A01C1A0FB143}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB806ED3-361D-4C38-8CF5-A01C1A0FB143}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB806ED3-361D-4C38-8CF5-A01C1A0FB143}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB806ED3-361D-4C38-8CF5-A01C1A0FB143}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
