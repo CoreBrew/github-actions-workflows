@@ -38,7 +38,8 @@ jobs:
         run: ls ./artifacts/*.nupkg
           
       # Check each package and upload if it doesn't exist
-      - name: Upload NuGet packages if they do not exist                
+      - name: Upload NuGet packages if they do not exist
+        shell: pwsh
         env:
           NUGET_API_KEY: ${{ secrets.NuGetApiKey }}
         run: |
@@ -131,11 +132,7 @@ jobs:
                     
           #set artifacts folder
           $artifactFolder = "./artifacts"
-        
-          Write-Host ""
-          Write-Host "Print out all nupkg files in $artifactFolder"
-          ls $artifactFolder -Filter *.nupkg
-          
+            
           Write-Host ""
           Write-Host "########## Now loop packages #########"
           $packages = Get-ChildItem $artifactFolder -Filter *.nupkg
@@ -152,14 +149,4 @@ jobs:
                 dotnet nuget push $p.FullName -k $env:NUGET_API_KEY -s https://api.nuget.org/v3/index.json          
             }
             Write-Host ""
-          }
-        shell: pwsh
-                  
- 
-
-
-
-
-
-
-          
+          }        
