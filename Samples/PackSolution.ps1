@@ -66,7 +66,9 @@ function Test-NuGetPackage
         if ($_.Exception.Response.StatusCode -eq 404)
         {
             # Handle 404 error
-            Write-Host "Package '$PackageName' not found on NuGet.org." -ForegroundColor Yellow
+            Write-Host "Package: " -NoNewline
+            Write-Host $PackageName -ForegroundColor Yellow -NoNewline
+            Write-Host " not found on NuGet.org."             
             return $false
         }
         else
@@ -109,7 +111,7 @@ foreach ($p in $packages)
     $exists = Test-NuGetPackage -PackageName $result.Id -Version $result.Version
     if($exists -eq $false)
     {
-        dotnet nuget push $p.FullName -k "ReplaceWithCorrectKey" -s https://api.nuget.org/v3/index.json        
+        dotnet nuget push $p.FullName -k "ReplaceWithCorrectKey" -s https://api.nuget.org/v3/index.json
     }
     else
     {

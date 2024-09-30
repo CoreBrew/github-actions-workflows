@@ -31,16 +31,14 @@ jobs:
         run: mkdir artifacts
         
       - name: Pack packable projects
-        run: dotnet pack --configuration ${{ inputs.buildConfiguration}} --output ./artifacts
+        run: dotnet pack --configuration ${{ inputs.buildConfiguration }} --output ./artifacts
       
       # List created .nupkg files
       - name: List .nupkg files
         run: ls ./artifacts/*.nupkg
           
       # Check each package and upload if it doesn't exist
-      - name: Upload NuGet packages if they do not exist
-        env:
-          NUGET_API_KEY: ${{ secrets.NuGetApiKey }}        
+      - name: Upload NuGet packages if they do not exist        
         shell: pwsh
         run: |
           ######## Classes #####################################
@@ -111,7 +109,9 @@ jobs:
               if ($_.Exception.Response.StatusCode -eq 404)
               {
                 # Handle 404 error
-                Write-Host "Package '$PackageName' not found on NuGet.org." -ForegroundColor Yellow
+                Write-Host "Package: " -NoNewline
+                Write-Host $PackageName -ForegroundColor Yellow -NoNewline
+                Write-Host " not found on NuGet.org."
                 return $false
               }
               else
@@ -151,7 +151,7 @@ jobs:
             $exists = Test-NuGetPackage -PackageName $result.Id -Version $result.Version
             if($exists -eq $false)
             {
-                dotnet nuget push $p.FullName -k $env:NUGET_API_KEY -s https://api.nuget.org/v3/index.json
+                dotnet nuget push $p.FullName -k ${{ secrets.NuGetApiKey }} -s https://api.nuget.org/v3/index.json
             }
             else
             {
