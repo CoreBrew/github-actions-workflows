@@ -79,6 +79,9 @@ function Test-NuGetPackage
 }
 
 ############# Actual script #######################################
+#debug the powershell used version
+Write-Host "################## Writing out the powershell version #######################"
+Write-Host $PSVersionTable
 
 #Ensure path starting point is where we want it to be
 cd C:\Projects\CoreBrew\github-actions-workflows\

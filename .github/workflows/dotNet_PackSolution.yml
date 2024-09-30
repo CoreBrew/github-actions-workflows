@@ -30,7 +30,7 @@ jobs:
       - name: Create artifacts folder
         run: mkdir artifacts
         
-      - name: Pack the NuGet package
+      - name: Pack packable projects
         run: dotnet pack --configuration ${{ inputs.buildConfiguration}} --output ./artifacts
       
       # List created .nupkg files
@@ -123,7 +123,11 @@ jobs:
             }
           }
         
-          ############# Actual script #######################################                              
+          ############# Actual script #######################################  
+          #debug the powershell used version
+          Write-Host "################## Writing out the powershell version #######################"          
+          Write-Host $PSVersionTable
+          
           #set artifacts folder
           $artifactFolder = "./artifacts"
           
