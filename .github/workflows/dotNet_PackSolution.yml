@@ -12,7 +12,7 @@ on:
         required: false
         default: ubuntu-latest  # Default environment if not specified
     secrets:
-      NuGetApiKey:
+      NuGetApiKey:        
         description: 'A NuGetApiKey passed from the caller workflow'
         required: true        
 
@@ -38,8 +38,9 @@ jobs:
         run: ls ./artifacts/*.nupkg
           
       # Check each package and upload if it doesn't exist
-      - name: Upload NuGet packages if they do not exist        
-        shell: pwsh
+      - name: Upload NuGet packages if they do not exist                
+        env:
+          NUGET_API_KEY: ${{ secrets.NuGetApiKey }}
         run: |
           ######## Classes #####################################
           class NuGetPackageInfo
@@ -150,8 +151,8 @@ jobs:
             Write-Host $result.Version -ForegroundColor Yellow
             $exists = Test-NuGetPackage -PackageName $result.Id -Version $result.Version
             if($exists -eq $false)
-            {
-                dotnet nuget push $p.FullName -k ${{ secrets.NuGetApiKey }} -s https://api.nuget.org/v3/index.json
+            {                
+                dotnet nuget push $p.FullName -k $env:NUGET_API_KEY -s https://api.nuget.org/v3/index.json          
             }
             else
             {
@@ -159,6 +160,7 @@ jobs:
             }
             Write-Host ""
           }
+        shell: pwsh
                   
  
 

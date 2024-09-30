@@ -22,4 +22,4 @@ jobs:
     with:
       buildConfiguration: ${{ inputs.buildConfiguration }}
     secrets:
-      NuGetApiKey: ${{ secrets.UPDATE_ALL_PACKAGES_KEY }}      
+      NuGetApiKey: ${{ secrets.NuGetApiKey }}      
