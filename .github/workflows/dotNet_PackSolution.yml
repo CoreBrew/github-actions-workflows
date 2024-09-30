@@ -152,12 +152,12 @@ jobs:
             if($exists -eq $false)
             {
                 dotnet nuget push $p.FullName -k $env:NUGET_API_KEY -s https://api.nuget.org/v3/index.json
-          }
-          else
-          {
-            Remove-Item $p.FullName
-          }
-          Write-Host ""
+            }
+            else
+            {
+              Remove-Item $p.FullName
+            }
+            Write-Host ""
           }
                   
  
