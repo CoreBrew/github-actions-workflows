@@ -134,7 +134,7 @@ jobs:
           $artifactFolder = "./artifacts"
           
           ## pack all packable projects in solution
-          dotnet pack --configuration $env.BUILD_CFG --output $artifactFolder
+          dotnet pack -c $env.BUILD_CFG -o $artifactFolder
           
           Write-Host ""
           Write-Host "Print out all nupkg files in $artifactFolder"
