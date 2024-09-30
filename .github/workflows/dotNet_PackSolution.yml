@@ -155,10 +155,6 @@ jobs:
             {                
                 dotnet nuget push $p.FullName -k $env:NUGET_API_KEY -s https://api.nuget.org/v3/index.json          
             }
-            else
-            {
-              Remove-Item $p.FullName
-            }
             Write-Host ""
           }
         shell: pwsh
