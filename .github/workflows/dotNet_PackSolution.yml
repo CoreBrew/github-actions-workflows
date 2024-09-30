@@ -49,17 +49,20 @@ jobs:
           NUGET_API_KEY: ${{ secrets.NuGetApiKey }}
           RELEASE_STAGE: ${{ inputs.releaseStage }}
         run: |
-          ######## Classes #####################################
+          ####################### PowerShell script #######################
+          ######## Classes ################################################
           class NuGetPackageInfo
           {
             [string]$Id
             [string]$Version
+            [Boolean]$ReleaseStageMatch
         
             # Constructor to initialize the properties
-            NuGetPackageInfo([string]$id, [string]$version)
+            NuGetPackageInfo([string]$id, [string]$version, [Boolean]$ReleaseStageMatch)
             {
               $this.Id = $id
               $this.Version = $version
+              $this.ReleaseStageMatch = $ReleaseStageMatch
             }
           }
         
