@@ -41,7 +41,6 @@ jobs:
       - name: Upload NuGet packages if they do not exist                
         env:
           NUGET_API_KEY: ${{ secrets.NuGetApiKey }}
-          BUILD_CFG: "${{ inputs.buildConfiguration }}"
         run: |
           ######## Classes #####################################
           class NuGetPackageInfo
@@ -129,13 +128,10 @@ jobs:
           #debug the powershell used version
           Write-Host "################## Writing out the powershell version #######################"          
           Write-Host $PSVersionTable
-          
+                    
           #set artifacts folder
           $artifactFolder = "./artifacts"
-          
-          ## pack all packable projects in solution
-          dotnet pack -c $env.BUILD_CFG -o $artifactFolder
-          
+        
           Write-Host ""
           Write-Host "Print out all nupkg files in $artifactFolder"
           ls $artifactFolder -Filter *.nupkg
