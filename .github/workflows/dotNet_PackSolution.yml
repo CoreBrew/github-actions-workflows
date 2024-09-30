@@ -41,7 +41,7 @@ jobs:
       - name: Upload NuGet packages if they do not exist                
         env:
           NUGET_API_KEY: ${{ secrets.NuGetApiKey }}
-          BUILD_CFG: ${{ inputs.buildConfiguration }}
+          BUILD_CFG: "${{ inputs.buildConfiguration }}"
         run: |
           ######## Classes #####################################
           class NuGetPackageInfo
