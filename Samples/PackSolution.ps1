@@ -3,19 +3,21 @@ class NuGetPackageInfo
 {
     [string]$Id
     [string]$Version
+    [Boolean]$ReleaseStageMatch
 
     # Constructor to initialize the properties
-    NuGetPackageInfo([string]$id, [string]$version)
+    NuGetPackageInfo([string]$id, [string]$version, [Boolean]$ReleaseStageMatch)
     {
         $this.Id = $id
         $this.Version = $version
+        $this.ReleaseStageMatch = $ReleaseStageMatch
     }
 }
 
 ##Functions
 function Get-NuGetPackageVersion
 {
-    param ([string]$nupkgFilePath)
+    param ([string]$nupkgFilePath, [string]$releaseStage)
     # Extract .nuspec file from .nupkg
 
     $tempDir = "./artifacts/temp"
@@ -29,11 +31,20 @@ function Get-NuGetPackageVersion
     $version = $nuspecXml.package.metadata.version
     $id = $nuspecXml.package.metadata.id
 
+    if ($releaseStage.Length -eq $null -or $releaseStage -eq "")
+    {
+        $matchReleaseStage = $true        
+    }
+    else
+    {
+        $matchReleaseStage = $version.ToLower().Contains($releaseStage.ToLower())        
+    }
+    
     # Clean up the temporary files
     Remove-Item $tempDir -Recurse -Force
 
     # Return an instance of the class
-    return [NuGetPackageInfo]::new($id, $version)
+    return [NuGetPackageInfo]::new($id, $version, $matchReleaseStage)
 }
 
 function Test-NuGetPackage
@@ -68,7 +79,7 @@ function Test-NuGetPackage
             # Handle 404 error
             Write-Host "Package: " -NoNewline
             Write-Host $PackageName -ForegroundColor Yellow -NoNewline
-            Write-Host " not found on NuGet.org."             
+            Write-Host " not found on NuGet.org."
             return $false
         }
         else
@@ -103,18 +114,22 @@ Write-Host "########## Now loop packages #########"
 $packages = Get-ChildItem $artifactFolder -Filter *.nupkg
 foreach ($p in $packages)
 {
-    [NuGetPackageInfo]$result = Get-NuGetPackageVersion -nupkgFilePath $p.FullName
+    [NuGetPackageInfo]$result = Get-NuGetPackageVersion -nupkgFilePath $p.FullName -releaseStage 'alpha'
     Write-Host "NuGet package id is: " -NoNewline
     Write-Host $result.Id -ForegroundColor Yellow
     Write-Host "NuGet package version is: " -NoNewline
     Write-Host $result.Version -ForegroundColor Yellow
+    Write-Host "NuGet pacakge matches release stage: " -NoNewline
+    Write-Host $result.ReleaseStageMatch -ForegroundColor Yellow
+    
     $exists = Test-NuGetPackage -PackageName $result.Id -Version $result.Version
-    if($exists -eq $false)
+    if ($exists -eq $false -and $result.ReleaseStageMatch -eq $true)
     {
         dotnet nuget push $p.FullName -k "ReplaceWithCorrectKey" -s https://api.nuget.org/v3/index.json
     }
     else
     {
+        Write-Host "Package does not require upload, delete file"
         Remove-Item $p.FullName
     }
     Write-Host ""

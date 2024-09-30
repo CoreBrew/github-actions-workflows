@@ -11,6 +11,11 @@ on:
         type: string
         required: false
         default: ubuntu-latest  # Default environment if not specified
+      releaseStage:
+        description: "The release stage of the file, provide empty string if not searching for it"
+        type: string
+        required: false
+        default: ""
     secrets:
       NuGetApiKey:        
         description: 'A NuGetApiKey passed from the caller workflow'
@@ -42,6 +47,7 @@ jobs:
         shell: pwsh
         env:
           NUGET_API_KEY: ${{ secrets.NuGetApiKey }}
+          RELEASE_STAGE: ${{ inputs.releaseStage }}
         run: |
           ######## Classes #####################################
           class NuGetPackageInfo
@@ -60,7 +66,7 @@ jobs:
           ######## Functions #####################################
           function Get-NuGetPackageVersion
           {
-            param ([string]$nupkgFilePath)
+            param ([string]$nupkgFilePath, [string]$releaseStage)
             # Extract .nuspec file from .nupkg
         
             $tempDir = "./artifacts/temp"
@@ -74,11 +80,20 @@ jobs:
             $version = $nuspecXml.package.metadata.version
             $id = $nuspecXml.package.metadata.id
         
+            if ($releaseStage.Length -eq $null -or $releaseStage -eq "")
+            {
+              $matchReleaseStage = $true
+            }
+            else
+            {
+            $matchReleaseStage = $version.ToLower().Contains($releaseStage.ToLower())
+            }
+            
             # Clean up the temporary files
             Remove-Item $tempDir -Recurse -Force
         
             # Return an instance of the class
-            return [NuGetPackageInfo]::new($id, $version)
+            return [NuGetPackageInfo]::new($id, $version, $matchReleaseStage)
           }
           
           function Test-NuGetPackage
@@ -138,15 +153,23 @@ jobs:
           $packages = Get-ChildItem $artifactFolder -Filter *.nupkg
           foreach ($p in $packages)
           {
-            [NuGetPackageInfo]$result = Get-NuGetPackageVersion -nupkgFilePath $p.FullName
+            [NuGetPackageInfo]$result = Get-NuGetPackageVersion -nupkgFilePath $p.FullName -releaseStage $env:RELEASE_STAGE
             Write-Host "NuGet package id is: " -NoNewline
             Write-Host $result.Id -ForegroundColor Yellow
             Write-Host "NuGet package version is: " -NoNewline
             Write-Host $result.Version -ForegroundColor Yellow
+            Write-Host "NuGet pacakge matches release stage: " -NoNewline
+            Write-Host $result.ReleaseStageMatch -ForegroundColor Yellow          
+          
             $exists = Test-NuGetPackage -PackageName $result.Id -Version $result.Version
-            if($exists -eq $false)
+            if ($exists -eq $false -and $result.ReleaseStageMatch -eq $true)
             {                
                 dotnet nuget push $p.FullName -k $env:NUGET_API_KEY -s https://api.nuget.org/v3/index.json          
             }
+            else
+            {
+              Write-Host "Package does not require upload, delete file"
+              Remove-Item $p.FullName
+            }          
             Write-Host ""
           }        

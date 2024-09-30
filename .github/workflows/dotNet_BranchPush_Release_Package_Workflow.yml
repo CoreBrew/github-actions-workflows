@@ -6,6 +6,15 @@ on:
         description: 'The build configuration to use, fx Debug, Release'        
         required: true
         type: string
+      runsOn:
+        type: string
+        required: false
+        default: ubuntu-latest  # Default environment if not specified        
+      releaseStage:
+        description: "The release stage of the file, provide empty string if not searching for it"
+        type: string
+        required: false
+        default: ""
     secrets:
       NuGetApiKey:
         description: 'A NuGetApiKey passed from the caller workflow'
@@ -21,5 +30,6 @@ jobs:
     uses: CoreBrew/github-actions-workflows/.github/workflows/dotNet_PackSolution.yml@main
     with:
       buildConfiguration: ${{ inputs.buildConfiguration }}
+      releaseStage: ${{ inputs.releaseStage }}
     secrets:
       NuGetApiKey: ${{ secrets.NuGetApiKey }}      
