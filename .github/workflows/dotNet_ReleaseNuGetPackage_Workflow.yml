@@ -1,4 +1,4 @@
-name: dotNet_BranchPush_Release_Package_Workflow
+name: dotNet_ReleaseNuGetPackage_Workflow.yml
 on:
   workflow_call:
     inputs:
