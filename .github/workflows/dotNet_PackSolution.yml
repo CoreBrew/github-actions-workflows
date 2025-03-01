@@ -32,7 +32,7 @@ jobs:
         uses: actions/setup-dotnet@v4
         id: setupDotNet
         with:
-          dotnet-version: [ '8.x', '9.x', '10.x' ]
+          dotnet-version: '10.x'
             
       - name: Verify .NET version
         run: dotnet --info
