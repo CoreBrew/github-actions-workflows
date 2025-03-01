@@ -15,6 +15,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        id: setupDotNet
+        with:
+          dotnet-version: '10.x'
+
+      - name: Verify .NET version
+        run: dotnet --info
 
       - name: Restore dependencies
         run: dotnet restore
