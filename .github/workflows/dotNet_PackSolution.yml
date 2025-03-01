@@ -32,8 +32,11 @@ jobs:
         uses: actions/setup-dotnet@v4
         id: setupDotNet
         with:
-          dotnet-version: 9.0.x          
+          dotnet-version: '9.0.x'
       - run: echo 'The installed dotnet version is ${{ steps.setupDotNet.outputs.dotnet-version }}'
+      
+      - name: Verify .NET version
+        run: dotnet --info
 
       - name: Restore dependencies
         run: dotnet restore
