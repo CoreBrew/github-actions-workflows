@@ -30,7 +30,7 @@ jobs:
         run: dotnet --info
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore /p:EnableWindowsTargeting=true
 
       - name: Build project
         run: dotnet build --configuration ${{ inputs.buildConfiguration }} --no-restore /p:EnableWindowsTargeting=true
