@@ -38,14 +38,14 @@ jobs:
         run: dotnet --info
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore /p:EnableWindowsTargeting=true
         
       # Ensure the artifacts folder exists
       - name: Create artifacts folder
         run: mkdir artifacts
         
       - name: Pack packable projects
-        run: dotnet pack --configuration ${{ inputs.buildConfiguration }} --output ./artifacts
+        run: dotnet pack --configuration ${{ inputs.buildConfiguration }} --output ./artifacts /p:EnableWindowsTargeting=true
       
       # List created .nupkg files
       - name: List .nupkg files
